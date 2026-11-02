@@ -83,12 +83,7 @@ def gerar_animacao(dir_entrada, dir_saida, nome_mes):
                 linewidth=0.3
             )
 
-        # URL direta do CartoDB (estilo Positron sem rótulos) com injeção da chave API
-        chave_api = "cb1_4zy1_1_005da78b8530b5f92fb82d18"
-        url_carto = f"https://a.basemaps.cartocdn.com/light_nolabels/{{z}}/{{x}}/{{y}}.png?api_key={chave_api}"
-
-        # Adiciona o mapa base usando a URL autenticada
-        cx.add_basemap(ax, source=url_carto, reset_cache=True)
+        cx.add_basemap(ax, source=cx.providers.Esri.WorldGrayCanvas)
 
         texto_data = periodo.strftime('%Y-%m-%d %H:%M')
         ax.text(0.05, 0.95, texto_data, transform=ax.transAxes, fontsize=16,
