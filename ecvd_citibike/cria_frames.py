@@ -42,7 +42,7 @@ def gerar_animacao(dir_entrada, dir_saida, nome_mes):
     ymin, ymax = gdf_limites.geometry.y.min(), gdf_limites.geometry.y.max()
 
     # Agrupamento por fatias de 6h
-    fatias_tempo = df.groupby(pd.Grouper(key='started_at', freq='6h'))
+    fatias_tempo = df.groupby(pd.Grouper(key='started_at', freq='15min'))
     frame_idx = 0
 
     for periodo, dados in fatias_tempo:
