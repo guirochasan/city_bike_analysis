@@ -69,11 +69,11 @@ def gerar_animacao(dir_entrada, dir_saida, nome_mes):
 
     # ── Agregação Base (O Relógio da Realidade cravado em 1 hora) ──
     df_saidas = df.rename(columns={'start_station_name': 'estacao'})
-    saidas = df_saidas.groupby([pd.Grouper(key='started_at', freq='1h'), 'estacao']).size().rename('saidas')
+    saidas = df_saidas.groupby([pd.Grouper(key='started_at', freq='2h'), 'estacao']).size().rename('saidas')
     saidas.index.names = ['tempo', 'estacao']
 
     df_entradas = df.rename(columns={'end_station_name': 'estacao'})
-    entradas = df_entradas.groupby([pd.Grouper(key='ended_at', freq='1h'), 'estacao']).size().rename('entradas')
+    entradas = df_entradas.groupby([pd.Grouper(key='ended_at', freq='2h'), 'estacao']).size().rename('entradas')
     entradas.index.names = ['tempo', 'estacao']
 
     movimento = pd.concat([saidas, entradas], axis=1).fillna(0)
