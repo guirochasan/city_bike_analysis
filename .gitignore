@@ -1,5 +1,8 @@
 .venv/
 *.zip
 *.csv
-*.png
 *.html
+ecvd_citibike/frames_*/
+ecvd_citibike/ordenado_*/
+ecvd_citibike/*_porcentagem_cheia.ipynb
+ecvd_citibike/*_porcentagem_cheia*.png
