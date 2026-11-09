@@ -1,0 +1,123 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Artigo - Cadernos de Visualização de Dados (template do prof. Gustavo)
+% Projeto: city_bike_analysis (Citi Bike NYC, 2024)
+% Versão com 5 figuras (3 páginas)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% CONFIGURAÇÃO
+\documentclass[10pt, a4paper, twocolumn]{article}
+\input{config.tex} % arquivo de configuração do professor (copiar sem alterar)
+
+% as figuras ficam na pasta plots/
+\graphicspath{{plots/}}
+
+% permite figuras largas ocuparem mais espaço da página
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\dblfloatpagefraction}{0.6}
+\setcounter{dbltopnumber}{3}
+\setcounter{totalnumber}{5}
+
+%% IDENTIFICAÇÃO
+%----------------------------------------------------------------------------------------
+\title{Como Nova York pedala: sazonalidade e assimetria espaço-temporal no Citi Bike (2024)}
+
+\author{
+	\authorstyle{Tiago Brito\textsuperscript{1}, José Lima\textsuperscript{1}, Rafael Lima\textsuperscript{2}, Guilherme Rocha\textsuperscript{2}} \\
+	\textsuperscript{1}\institution{Ciência da Computação, UFPB}\\
+	\textsuperscript{2}\institution{Ciência de Dados e Inteligência Artificial, UFPB}\\
+}
+
+\date{9 de novembro de 2026}
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+\thispagestyle{firstpage}
+
+%	RESUMO
+%----------------------------------------------------------------------------------------
+\lettrineabstract{%
+Analisamos 6,88 milhões de viagens do Citi Bike, em Nova York, comparando janeiro (inverno, mês de baixa) e setembro (fim de verão, mês de alta) de 2024. Mostramos como a sazonalidade muda o volume e o perfil dos usuários, como as bicicletas elétricas dominam a frota e como o ritmo pendular dos dias úteis esvazia e lota estações de Manhattan.
+}
+
+%	CONTEÚDO
+%----------------------------------------------------------------------------------------
+
+\section*{Introdução}
+
+O Citi Bike é o maior sistema de bicicletas compartilhadas da América do Norte, com mais de 2.000 estações em Manhattan, Brooklyn, Queens e Bronx. Sistemas assim sofrem de assimetria direcional: em certos horários, regiões inteiras ficam sem bicicletas (déficit), enquanto centros de trabalho ficam sem docas livres (superávit). Entender quando, onde e por quem o sistema é usado ajuda a planejar a rede. Respondemos a quatro perguntas: (i) como o clima altera volume e perfil dos usuários; (ii) quanto a frota elétrica é preferida; (iii) como o ritmo diário distingue dias úteis de fins de semana; (iv) onde e quando surgem os gargalos.
+
+\section*{Dados e método}
+
+Escolhemos janeiro e setembro de 2024 por serem extremos sazonais do sistema: janeiro, em pleno inverno, é o mês de menor movimento do ano, e setembro, no fim do verão, é o de maior. Comparar os dois permite ver como o uso muda entre o regime mais fraco e o mais forte. Usamos os registros públicos de viagens do Citi Bike \citep{citibike}, com horário de saída e chegada, estações de origem e destino, coordenadas, tipo de bicicleta e tipo de usuário. Removemos viagens iniciadas fora do mês de análise, com duração fora de 1 a 1.440 minutos e com coordenadas fora da área de Nova York. As séries horárias foram normalizadas pelo número de dias de cada regime (úteis, fins de semana e feriados), para não distorcer a comparação entre meses. O processamento foi feito em Python, com pandas \citep{pandas} e matplotlib \citep{matplotlib}. As escolhas visuais seguem a literatura de visualização \citep{tufte1983,cleveland1984,wilke2019,ware2012,berinato2016}: títulos que declaram o achado, rotulagem direta e uma paleta própria para cada variável.
+
+\section*{Resultados}
+
+\subsection*{Sazonalidade e perfil}
+
+O volume salta de 1,88 milhão de viagens em janeiro para 4,98 milhões em setembro (+165\%). Os membros crescem 136\%, mas os usuários casuais quintuplicam (+401\%), e sua fatia vai de 11,0\% para 20,8\% (Figura \ref{fig:rv1}). Mesmo no frio, o uso por assinantes se mantém: o sistema funciona como transporte cotidiano.
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=0.9\textwidth]{rv1_sazonalidade_perfil.jpg}
+	\caption{Volume de viagens por mês e perfil de usuário.}
+	\label{fig:rv1}
+\end{figure*}
+
+\subsection*{Preferência de frota}
+
+As bicicletas elétricas respondem por 62,8\% a 76,2\% das viagens em todos os recortes. A preferência é maior entre usuários casuais: 76,2\% em janeiro e 72,3\% em setembro (Figura \ref{fig:rv2}).
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=0.8\textwidth]{rv2_preferencia_frota.jpg}
+	\caption{Participação de bicicletas elétricas e clássicas por perfil e mês.}
+	\label{fig:rv2}
+\end{figure*}
+
+\subsection*{Ritmo circadiano}
+
+Nos dias úteis há dois picos agudos, às 8h e às 17h, típicos do deslocamento casa-trabalho. Fins de semana e feriados têm uma curva suave entre 12h e 17h, e a demanda de verão é 4,1 vezes a de inverno (Figura \ref{fig:rv3}). Feriados em dia de semana, como Ano Novo e Labor Day, eliminam o pico da manhã.
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=0.9\textwidth]{rv3_ritmo_circadiano_demanda.jpg}
+	\caption{Demanda horária média por dia, em dias úteis e em fins de semana e feriados.}
+	\label{fig:rv3}
+\end{figure*}
+
+\subsection*{Duração das viagens}
+
+A mediana dos membros é de 7,5 minutos em janeiro e 8,8 em setembro, compatível com o uso de última milha junto ao metrô. Usuários casuais pedalam cerca de 50\% mais (mediana de 13,2 minutos em setembro), mas a maioria encerra antes de 30 minutos (Figura \ref{fig:rv4}).
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=0.9\textwidth]{rv4_distribuicao_duracao.jpg}
+	\caption{Distribuição de duração (densidade) e percentual acumulado.}
+	\label{fig:rv4}
+\end{figure*}
+
+\subsection*{Pêndulo geográfico}
+
+Entre 7h e 9h, bairros residenciais (Upper West Side, Upper East Side, East Village e Williamsburg) têm déficit de bicicletas, enquanto Midtown e Financial District recebem mais do que enviam. Entre 17h e 19h o sentido se inverte (Figura \ref{fig:rv5}).
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=0.75\textwidth]{rv5_assimetria_espacial_pendular.jpg}
+	\caption{Saldo líquido (chegadas $-$ saídas) por estação, de manhã e à tarde. Vermelho indica déficit e azul, superávit.}
+	\label{fig:rv5}
+\end{figure*}
+
+\subsection*{Animações}
+
+Duas animações de 60 FPS, de uma semana de cada mês, mostram essa pulsação ao longo do tempo\footnote{\url{https://github.com/guirochasan/city_bike_analysis}}. Em janeiro, o fluxo cai cerca de 54\% no fim de semana de 6 e 7, após a primeira tempestade de neve do ano. Em setembro, o feriado de Labor Day tem padrão recreativo, seguido da explosão pendular dos dias úteis.
+
+\section*{Conclusão}
+
+O Citi Bike pedala no ritmo do trabalho, mas o verão traz o público casual e a frota elétrica. Os padrões sugerem três decisões: concentrar a manutenção pesada no inverno, garantir baterias carregadas em áreas turísticas e pré-posicionar bicicletas antes dos picos, usando calendário de feriados e previsão do tempo, e não apenas o dia da semana. Como limitações, usamos só dois meses de um ano; incluir mais meses e variáveis meteorológicas é o próximo passo.
+
+%	REFERÊNCIAS
+\printbibliography[title={Referências}]
+
+\end{document}
